@@ -121,5 +121,22 @@ class TestCalculateDueDate(unittest.TestCase):
     start_time = datetime(2023, 6, 26, 11, 23)
     self.assertEqual(IssueTrack.minutes_to_eod(start_time), 337)
 
+  def test_calculate_due_date_non_working_day(self):
+    self.assertEqual(IssueTrack.calculate_due_date(saturday, 0), f"The submit date ({saturday}) is not a valid working day.")
+    self.assertEqual(IssueTrack.calculate_due_date(sunday, 0), f"The submit date ({sunday}) is not a valid working day.")
+
+  def test_calculate_due_date_outside_of_business_hours(self):
+    self.assertEqual(IssueTrack.calculate_due_date(monday, 0), f"The submit date ({monday}) is outside of working hours.")
+    monday_at_close = monday.replace(hour=17)
+    self.assertEqual(IssueTrack.calculate_due_date(monday_at_close, 0), f"The submit date ({monday_at_close}) is outside of working hours.")
+
+  def test_calculate_due_date_in_one_week(self):
+    date = datetime(2023, 6, 26, 11, 11)
+    self.assertEqual(IssueTrack.calculate_due_date(date, 8 * 5), date + timedelta(days=7))
+
+  def test_calculate_due_date_tuesday_to_thurday(self):
+    date = datetime(2023, 6, 27, 14, 12)
+    self.assertEqual(IssueTrack.calculate_due_date(date, 16), date + timedelta(days=2))
+
 if __name__ == '__main__':
   unittest.main()
