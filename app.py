@@ -13,6 +13,12 @@ class IssueTrack:
     def calculate_due_date(start, turnAroundTime):
         return turnAroundTime
 
+    def reduce_turn_around_time(date_time, turn_around_minutes):
+        minutes_to_eod = IssueTrack.minutes_to_eod(date_time)
+        if turn_around_minutes <= minutes_to_eod:
+            return date_time + timedelta(minutes=turn_around_minutes)
+        return IssueTrack.reduce_turn_around_time(IssueTrack.get_next_working_date(date_time), turn_around_minutes - minutes_to_eod)
+
     def is_working_day(date):
         day_of_week = int(date.strftime("%w"))
         if day_of_week == sunday or day_of_week == saturday:
@@ -44,7 +50,7 @@ class IssueTrack:
           date_increment = 1
         return date.replace(hour=start_hour, minute=0) + timedelta(date_increment)
 
-    def time_to_eod(date_time):
+    def minutes_to_eod(date_time):
         submit_hour = int(date_time.strftime("%H"))
         submit_minute = int(date_time.strftime("%M"))
         return (end_hour - submit_hour) * 60 - submit_minute

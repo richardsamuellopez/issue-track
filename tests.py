@@ -117,10 +117,9 @@ class TestCalculateDueDate(unittest.TestCase):
     self.assertEqual(IssueTrack.reduce_turn_around_time(start_time, 120), start_time + timedelta(hours=2))
     self.assertEqual(IssueTrack.reduce_turn_around_time(start_time, 8 * 60), start_time + timedelta(days=1))
 
-
-  def test_time_to_eod(self):
+  def test_minutes_to_eod(self):
     start_time = datetime(2023, 6, 26, 11, 23)
-    self.assertEqual(IssueTrack.time_to_eod(start_time), 337)
+    self.assertEqual(IssueTrack.minutes_to_eod(start_time), 337)
 
 if __name__ == '__main__':
   unittest.main()
