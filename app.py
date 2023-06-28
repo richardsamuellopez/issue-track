@@ -39,13 +39,6 @@ class IssueTrack:
         else:
             return False
 
-    def is_before_working_hours(date):
-        hour_of_day = int(date.strftime("%H"))
-        if hour_of_day < start_hour:
-            return True
-        else:
-            return False
-
     def get_next_working_date(date):
         day_of_week = int(date.strftime("%w"))
         if day_of_week == 6:
