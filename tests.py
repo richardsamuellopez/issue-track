@@ -103,7 +103,6 @@ class TestCalculateDueDate(unittest.TestCase):
 
   def test_get_next_working_date(self):
     next_monday = monday + timedelta(7)
-
     self.assertEqual(IssueTrack.get_next_working_date(sunday), monday)
     self.assertEqual(IssueTrack.get_next_working_date(monday), tuesday)
     self.assertEqual(IssueTrack.get_next_working_date(tuesday), wednesday)
@@ -112,11 +111,9 @@ class TestCalculateDueDate(unittest.TestCase):
     self.assertEqual(IssueTrack.get_next_working_date(friday), next_monday)
     self.assertEqual(IssueTrack.get_next_working_date(saturday), next_monday)
 
-  def test_dueToday(self):
-    dueDate = IssueTrack.calculate_due_date(monday, 2)
-    dueToday = datetime(2023, 6, 26, 15)
-
-    self.assertEqual(dueDate, 2, f'{dueDate} equals {dueToday}')
+  def test_time_to_eod(self):
+    start_time = datetime(2023, 6, 26, 11, 23)
+    self.assertEqual(IssueTrack.time_to_eod(start_time), 337)
 
 if __name__ == '__main__':
   unittest.main()
