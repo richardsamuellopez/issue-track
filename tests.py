@@ -103,13 +103,20 @@ class TestCalculateDueDate(unittest.TestCase):
 
   def test_get_next_working_date(self):
     next_monday = monday + timedelta(7)
-    self.assertEqual(IssueTrack.get_next_working_date(sunday), monday)
-    self.assertEqual(IssueTrack.get_next_working_date(monday), tuesday)
-    self.assertEqual(IssueTrack.get_next_working_date(tuesday), wednesday)
-    self.assertEqual(IssueTrack.get_next_working_date(wednesday), thursday)
-    self.assertEqual(IssueTrack.get_next_working_date(thursday), friday)
-    self.assertEqual(IssueTrack.get_next_working_date(friday), next_monday)
-    self.assertEqual(IssueTrack.get_next_working_date(saturday), next_monday)
+    self.assertEqual(IssueTrack.get_next_working_date(sunday), monday.replace(hour=9))
+    self.assertEqual(IssueTrack.get_next_working_date(monday), tuesday.replace(hour=9))
+    self.assertEqual(IssueTrack.get_next_working_date(tuesday), wednesday.replace(hour=9))
+    self.assertEqual(IssueTrack.get_next_working_date(wednesday), thursday.replace(hour=9))
+    self.assertEqual(IssueTrack.get_next_working_date(thursday), friday.replace(hour=9))
+    self.assertEqual(IssueTrack.get_next_working_date(friday), next_monday.replace(hour=9))
+    self.assertEqual(IssueTrack.get_next_working_date(saturday), next_monday.replace(hour=9))
+
+  def test_reduce_turn_around_time(self):
+    start_time = datetime(2023, 6, 26, 11, 23)
+
+    self.assertEqual(IssueTrack.reduce_turn_around_time(start_time, 120), start_time + timedelta(hours=2))
+    self.assertEqual(IssueTrack.reduce_turn_around_time(start_time, 8 * 60), start_time + timedelta(days=1))
+
 
   def test_time_to_eod(self):
     start_time = datetime(2023, 6, 26, 11, 23)

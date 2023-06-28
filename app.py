@@ -42,7 +42,7 @@ class IssueTrack:
           date_increment = 3
         else:
           date_increment = 1
-        return date + timedelta(date_increment)
+        return date.replace(hour=start_hour, minute=0) + timedelta(date_increment)
 
     def time_to_eod(date_time):
         submit_hour = int(date_time.strftime("%H"))
