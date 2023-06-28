@@ -9,7 +9,7 @@ class TestCalculateDueDate(unittest.TestCase):
   global monday 
   monday = datetime(2023, 6, 26, 13)
 
-  def test_isWorkingHours(self):
+  def test_is_working_hours(self):
     hour_0 = datetime(2023, 6, 25)
     hour_1 = datetime(2023, 6, 25, 1)
     hour_2 = datetime(2023, 6, 25, 2)

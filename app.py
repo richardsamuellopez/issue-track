@@ -4,14 +4,23 @@ class IssueTrack:
     def __init__(self):
         """ calc due date
         """
+
     def calculate_due_date(start, turnAroundTime):
         return turnAroundTime
+
     def is_working_day(date):
         day_of_week = int(date.strftime("%w"))
         if day_of_week == 0 or day_of_week == 6:
             return False
         else:
             return True
+
+    def is_working_hours(date):
+        hour_of_day = int(date.strftime("%H"))
+        if hour_of_day >= 9 and hour_of_day < 17:
+            return True
+        else:
+            return False
 
 if __name__ == '__main__':
     now = datetime.now()
