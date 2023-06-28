@@ -44,6 +44,11 @@ class IssueTrack:
           date_increment = 1
         return date + timedelta(date_increment)
 
+    def time_to_eod(date_time):
+        submit_hour = int(date_time.strftime("%H"))
+        submit_minute = int(date_time.strftime("%M"))
+        return (end_hour - submit_hour) * 60 - submit_minute
+
 if __name__ == '__main__':
     now = datetime.now()
 
