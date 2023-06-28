@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class IssueTrack:
     global start_hour, end_hour, sunday, saturday
@@ -33,6 +33,16 @@ class IssueTrack:
             return True
         else:
             return False
+
+    def get_next_working_date(date):
+        day_of_week = int(date.strftime("%w"))
+        if day_of_week == 6:
+          date_increment = 2
+        elif day_of_week == 5:
+          date_increment = 3
+        else:
+          date_increment = 1
+        return date + timedelta(date_increment)
 
 if __name__ == '__main__':
     now = datetime.now()
