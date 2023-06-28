@@ -10,8 +10,14 @@ class IssueTrack:
         """ calc due date
         """
 
-    def calculate_due_date(start, turnAroundTime):
-        return turnAroundTime
+    def calculate_due_date(submit_date, turn_around_time):
+        if IssueTrack.is_working_day(submit_date):
+            if IssueTrack.is_working_hours(submit_date):
+                return IssueTrack.reduce_turn_around_time(submit_date, turn_around_time * 60)
+            else:
+                return f"The submit date ({submit_date}) is outside of working hours."
+        else:
+            return f"The submit date ({submit_date}) is not a valid working day."
 
     def reduce_turn_around_time(date_time, turn_around_minutes):
         minutes_to_eod = IssueTrack.minutes_to_eod(date_time)
