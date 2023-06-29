@@ -84,24 +84,30 @@ class TestCalculateDueDate(unittest.TestCase):
     self.assertEqual(IssueTrack.get_next_working_date(friday), next_monday.replace(hour=9))
     self.assertEqual(IssueTrack.get_next_working_date(saturday), next_monday.replace(hour=9))
 
-  def test_reduce_turn_around_time(self):
+  def test_reduce_turnaround_time(self):
     start_time = datetime(2023, 6, 26, 11, 23)
 
-    self.assertEqual(IssueTrack.reduce_turn_around_time(start_time, 120), start_time + timedelta(hours=2))
-    self.assertEqual(IssueTrack.reduce_turn_around_time(start_time, 8 * 60), start_time + timedelta(days=1))
+    self.assertEqual(IssueTrack.reduce_turnaround_time(start_time, 120), start_time + timedelta(hours=2))
+    self.assertEqual(IssueTrack.reduce_turnaround_time(start_time, 8 * 60), start_time + timedelta(days=1))
 
   def test_minutes_to_eod(self):
     start_time = datetime(2023, 6, 26, 11, 23)
     self.assertEqual(IssueTrack.minutes_to_eod(start_time), 337)
 
+  def test_calculate_due_date_negative_turnaround_time(self):
+    self.assertEqual(IssueTrack.calculate_due_date(monday, -1), f"The turnaround time must be a positive value in hour(s)")
+
   def test_calculate_due_date_non_working_day(self):
-    self.assertEqual(IssueTrack.calculate_due_date(saturday, 0), f"The submit date ({saturday}) is not a valid working day.")
-    self.assertEqual(IssueTrack.calculate_due_date(sunday, 0), f"The submit date ({sunday}) is not a valid working day.")
+    self.assertEqual(IssueTrack.calculate_due_date(saturday, 1), f"The submit date ({saturday}) is not a valid working day.")
+    self.assertEqual(IssueTrack.calculate_due_date(sunday, 1), f"The submit date ({sunday}) is not a valid working day.")
 
   def test_calculate_due_date_outside_of_business_hours(self):
-    self.assertEqual(IssueTrack.calculate_due_date(monday, 0), f"The submit date ({monday}) is outside of working hours.")
+    self.assertEqual(IssueTrack.calculate_due_date(monday, 1), f"The submit date ({monday}) is outside of working hours.")
     monday_at_close = monday.replace(hour=17)
-    self.assertEqual(IssueTrack.calculate_due_date(monday_at_close, 0), f"The submit date ({monday_at_close}) is outside of working hours.")
+    self.assertEqual(IssueTrack.calculate_due_date(monday_at_close, 1), f"The submit date ({monday_at_close}) is outside of working hours.")
+
+  def test_calculate_due_date_fractions_of_hours(self):
+    self.assertEqual(IssueTrack.calculate_due_date(monday.replace(hour=9), .25), monday + timedelta(hours=9,minutes=15))
 
   def test_calculate_due_date_in_one_week(self):
     date = datetime(2023, 6, 26, 11, 11)

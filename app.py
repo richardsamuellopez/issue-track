@@ -10,20 +10,22 @@ class IssueTrack:
         """ calc due date
         """
 
-    def calculate_due_date(submit_date, turn_around_time):
-        if IssueTrack.is_working_day(submit_date):
+    def calculate_due_date(submit_date, turnaround_time):
+        if turnaround_time < 0:
+            return f"The turnaround time must be a positive value in hour(s)"
+        elif IssueTrack.is_working_day(submit_date):
             if IssueTrack.is_working_hours(submit_date):
-                return IssueTrack.reduce_turn_around_time(submit_date, turn_around_time * 60)
+                return IssueTrack.reduce_turnaround_time(submit_date, turnaround_time * 60)
             else:
                 return f"The submit date ({submit_date}) is outside of working hours."
         else:
             return f"The submit date ({submit_date}) is not a valid working day."
 
-    def reduce_turn_around_time(date_time, turn_around_minutes):
+    def reduce_turnaround_time(date_time, turnaround_minutes):
         minutes_to_eod = IssueTrack.minutes_to_eod(date_time)
-        if turn_around_minutes <= minutes_to_eod:
-            return date_time + timedelta(minutes=turn_around_minutes)
-        return IssueTrack.reduce_turn_around_time(IssueTrack.get_next_working_date(date_time), turn_around_minutes - minutes_to_eod)
+        if turnaround_minutes <= minutes_to_eod:
+            return date_time + timedelta(minutes=turnaround_minutes)
+        return IssueTrack.reduce_turnaround_time(IssueTrack.get_next_working_date(date_time), turnaround_minutes - minutes_to_eod)
 
     def is_working_day(date):
         day_of_week = int(date.strftime("%w"))
