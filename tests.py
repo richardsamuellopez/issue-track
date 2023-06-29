@@ -4,7 +4,6 @@ import unittest
 from app import IssueTrack
 
 class TestCalculateDueDate(unittest.TestCase):
-  now = datetime.now()
 
   global sunday, monday, tuesday, wednesday, thursday, friday, saturday
   sunday = datetime(2023, 6, 25)
